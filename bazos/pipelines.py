@@ -35,21 +35,7 @@ def create_listing(data):
 
     if response.text.find('Inzerát nebyl vložen do našeho bazaru') > -1:
         print('/n')
-        print(f'Inzerát {data["nadpis"]} nebyl vložen do bazaru. Nebude tedy ani smazán.')
-        return False
-
-    return True
-
-def delete_listing(id):
-    payload = {
-        'heslobazar': config.PASSWORD,
-        'idad': id,
-        'administrace': 'Vymazat',
-    }
-
-    response = verification.session.post('https://auto.bazos.cz/deletei2.php', data=payload)
-
-    print(response.text)
+        print(f'Inzerát {data["nadpis"]} nebyl vložen do bazaru.')
 
 class BazosPipeline(object):
     def process_item(self, item, spider):
@@ -57,7 +43,5 @@ class BazosPipeline(object):
             image_path = image['path']
             copyfile(f'photos/{image_path}', f'backups/{item["id"]}/{idx}.jpg')
 
-        # created = create_listing(item)
-        # if created:
-        #     delete_listing(item['id'])
+        create_listing(item)
         return item
