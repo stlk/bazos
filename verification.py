@@ -17,7 +17,7 @@ session.headers.update({
 def verify():
     payload = {
         'podminky': '1',
-        'teloverit': config.PHONE,
+        'teloverit': config.PHONE_VERIFICATION,
         'Submit': 'Odeslat',
     }
 
@@ -33,7 +33,7 @@ def verify():
 
     payload = {
         'klic': klic,
-        'klictelefon': f'+420{config.PHONE}',
+        'klictelefon': f'+420{config.PHONE_VERIFICATION}',
         'Submit': 'Odeslat',
     }
 
