@@ -4,17 +4,25 @@ from scrapy.utils.project import get_project_settings
 
 from bazos.spiders.bazos import ToScrapeSpiderXPath
 
-# import logging
-# import http.client
-#
-# http.client.HTTPConnection.debuglevel = 1
-#
-# logging.basicConfig()
-# logging.getLogger().setLevel(logging.DEBUG)
-# requests_log = logging.getLogger("requests.packages.urllib3")
-# requests_log.setLevel(logging.DEBUG)
-# requests_log.propagate = True
+import config
 
+import logging
+import http.client
+from raven.conf import setup_logging
+from raven.handlers.logging import SentryHandler
+
+http.client.HTTPConnection.debuglevel = 1
+
+logging.basicConfig()
+logging.getLogger().setLevel(logging.ERROR)
+requests_log = logging.getLogger("requests.packages.urllib3")
+requests_log.setLevel(logging.ERROR)
+requests_log.propagate = True
+
+handler = SentryHandler(config.RAVEN_DSN)
+handler.setLevel(logging.ERROR)
+
+setup_logging(handler)
 
 import verification
 if verification.verify():
