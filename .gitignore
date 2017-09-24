@@ -2,4 +2,4 @@
 /backups
 /env
 config.py
-log.txt
+session.pickle

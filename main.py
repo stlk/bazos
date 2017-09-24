@@ -18,6 +18,7 @@ from bazos.spiders.bazos import ToScrapeSpiderXPath
 
 import verification
 if verification.verify():
+    print('Ověřeno')
 
     process = CrawlerProcess(get_project_settings())
 
@@ -25,4 +26,4 @@ if verification.verify():
     result = process.start() # the script will block here until the crawling is finished
 
 else:
-    print('Overeni nebylo uspesne')
+    print('Ověření nebylo úspešné')

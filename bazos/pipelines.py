@@ -35,7 +35,9 @@ def create_listing(data):
 
     if response.text.find('Inzerát nebyl vložen do našeho bazaru') > -1:
         print('/n')
-        print(f'Inzerát {data["nadpis"]} nebyl vložen do bazaru.')
+        print(f'Inzerát {data["nadpis"]} NEBYL vložen do bazaru.')
+
+    print(f'Inzerát {data["nadpis"]} byl vložen do bazaru.')
 
 class BazosPipeline(object):
     def process_item(self, item, spider):

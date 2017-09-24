@@ -94,4 +94,6 @@ HTTPCACHE_IGNORE_HTTP_CODES = []
 HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 LOG_STDOUT = True
-LOG_FILE = 'log.txt'
+
+import datetime
+LOG_FILE = f'backups/{datetime.datetime.now().isoformat()}.log'
