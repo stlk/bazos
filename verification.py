@@ -1,3 +1,4 @@
+import sys
 import requests
 import config
 import pickle
@@ -37,7 +38,7 @@ def verify():
         print('Nepodařilo se obnovit session, bude nutné ověření SMS.')
         pass
 
-    if needs_verification():
+    if needs_verification() and 'raise' in sys.argv:
         raise Exception('Needs SMS verification!')
 
     payload = {
