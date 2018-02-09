@@ -9,9 +9,17 @@ from shutil import copyfile
 import verification
 import config
 
+from scrapy.selector import Selector
+
+def get_spam_protection():
+    response = verification.session.get('https://auto.bazos.cz/pridat-inzerat.php')
+    selected = Selector(text = response.content).xpath('//form[@id="formpridani"]//input[@type="hidden"]')[0]
+    return (selected.xpath('@name').extract_first(), selected.xpath('@value').extract_first())
+
 def create_listing(data):
+    spam_protection_key, spam_protection_value = get_spam_protection()
     payload = {
-        'fsdsdfs': 'tertertaa',
+        spam_protection_key: spam_protection_value,
         'heslo': config.PASSWORD,
         'cenavyber': '1',
         'maili': '',
@@ -33,7 +41,7 @@ def create_listing(data):
 
     print(response.text)
 
-    if response.text.find('Inzerát nebyl vložen do našeho bazaru') > -1:
+    if response.text.find('Inzerát nebyl vložen') > -1:
         print('/n')
         print(f'Inzerát {data["nadpis"]} NEBYL vložen do bazaru.')
 
