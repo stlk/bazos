@@ -32,7 +32,7 @@ class ToScrapeSpiderXPath(scrapy.Spider):
             'popis': ''.join(response.xpath('//div[@class="popis"]/text()').extract()),
             'jmeno': response.xpath('//td[@class="listadvlevo"]//a[contains(@href,"hodnoceni")]/text()').extract_first(),
             'telefoni': response.xpath('//td[@class="listadvlevo"]//a[contains(@href,"tel:")]/text()').extract_first(),
-            'lokalita': get_num(response.xpath('//td[@class="listadvlevo"]//a[contains(@href,"maps")]/text()').extract_first()),
+            'lokalita': get_num(response.xpath('//td[@class="listadvlevo"]//a[contains(@href,"maps")]/text()').re(r'\d{3}\s{1}\d{2}')[0]),
             'cena': get_num(response.xpath('//td[@class="listadvlevo"]//b/text()').extract_first()),
             'category': response.xpath('//link[@type="application/rss+xml"]/@href').re(r'(?<=cat=)\d+')[0],
             'image': response.xpath('//img[@id="bobrazek"]/@src').extract_first(),
