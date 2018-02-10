@@ -8,6 +8,7 @@
 from shutil import copyfile
 import verification
 import config
+import os
 
 from scrapy.selector import Selector
 
@@ -17,6 +18,9 @@ def get_spam_protection():
     return (selected.xpath('@name').extract_first(), selected.xpath('@value').extract_first())
 
 def create_listing(data):
+    print('Creating listing with data...')
+    print(data)
+
     spam_protection_key, spam_protection_value = get_spam_protection()
     payload = {
         spam_protection_key: spam_protection_value,
@@ -39,11 +43,15 @@ def create_listing(data):
 
     response = verification.session.post('https://auto.bazos.cz/insert.php', data=payload, files=files)
 
+    for file_info in data['files']:
+        os.remove('photos/' + file_info['path'])
+
     print(response.text)
 
     if response.text.find('Inzerát nebyl vložen') > -1:
         print('/n')
         print(f'Inzerát {data["nadpis"]} NEBYL vložen do bazaru.')
+        return
 
     print(f'Inzerát {data["nadpis"]} byl vložen do bazaru.')
 
