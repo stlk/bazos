@@ -26,6 +26,10 @@ class ToScrapeSpiderXPath(scrapy.Spider):
             os.makedirs(f'backups/{listing_id}/')
         with open(f'backups/{listing_id}/index.html', 'wb') as f:
             f.write(response.body)
+
+        file_urls = response.xpath('//a[contains(@onmouseover, "return zobrazek")]/@href').extract()
+        if not file_urls:
+            file_urls = response.xpath('//img[@id="bobrazek"]/@src').extract()
         yield {
             'id': listing_id,
             'nadpis': response.xpath('//h1[@class="nadpis"]/text()').extract_first(),
@@ -35,6 +39,5 @@ class ToScrapeSpiderXPath(scrapy.Spider):
             'lokalita': get_num(response.xpath('//td[@class="listadvlevo"]//a[contains(@href,"maps")]/text()').re(r'\d{3}\s{1}\d{2}')[0]),
             'cena': get_num(response.xpath('//td[@class="listadvlevo"]//b/text()').extract_first()),
             'category': response.xpath('//link[@type="application/rss+xml"]/@href').re(r'(?<=cat=)\d+')[0],
-            'image': response.xpath('//img[@id="bobrazek"]/@src').extract_first(),
-            'file_urls': response.xpath('//a[contains(@onmouseover, "return zobrazek")]/@href').extract(),
+            'file_urls': file_urls,
         }

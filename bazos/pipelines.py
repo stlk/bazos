@@ -37,7 +37,6 @@ def create_listing(data):
         file_object = open('photos/' + data['files'][index]['path'], 'rb') if idx <= len(data['files']) else ''
         files['souborp{0}'.format('' if idx == 1 else idx)] = file_object
 
-    payload.pop('image')
     payload.pop('file_urls')
     payload.pop('files')
 
