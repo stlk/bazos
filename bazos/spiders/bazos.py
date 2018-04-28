@@ -33,7 +33,7 @@ class ToScrapeSpiderXPath(scrapy.Spider):
         yield {
             'id': listing_id,
             'nadpis': response.xpath('//h1[@class="nadpis"]/text()').extract_first(),
-            'popis': ''.join(response.xpath('//div[@class="popis"]/text()').extract()),
+            'popis': ''.join(response.xpath('//td/table/tr/td/div[@class="popis"]/text()').extract()),
             'jmeno': response.xpath('//td[@class="listadvlevo"]//a[contains(@href,"hodnoceni")]/text()').extract_first(),
             'telefoni': response.xpath('//td[@class="listadvlevo"]//a[contains(@href,"tel:")]/text()').extract_first(),
             'lokalita': get_num(response.xpath('//td[@class="listadvlevo"]//a[contains(@href,"maps")]/text()').re(r'\d{3}\s{1}\d{2}')[0]),
