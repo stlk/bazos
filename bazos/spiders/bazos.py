@@ -8,8 +8,8 @@ listing_url = f'https://www.bazos.cz/moje-inzeraty.php?telefon={config.PHONE}'
 def get_num(x):
     return int(''.join(ele for ele in x if ele.isdigit()))
 
-class ToScrapeSpiderXPath(scrapy.Spider):
-    name = 'toscrape-xpath'
+class BazosSpiderXPath(scrapy.Spider):
+    name = 'bazos'
     start_urls = [
         listing_url,
     ]
