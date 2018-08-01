@@ -1,5 +1,6 @@
 import os
 import scrapy
+import re
 
 import config
 
@@ -39,5 +40,6 @@ class BazosSpiderXPath(scrapy.Spider):
             'lokalita': get_num(response.xpath('//td[@class="listadvlevo"]//a[contains(@href,"maps")]/text()').re(r'\d{3}\s{1}\d{2}')[0]),
             'cena': get_num(response.xpath('//td[@class="listadvlevo"]//b/text()').extract_first()),
             'category': response.xpath('//link[@type="application/rss+xml"]/@href').re(r'(?<=cat=)\d+')[0],
+            'rubrika': re.match(r'https:\/\/(\w+)\.', response.url).groups()[0],
             'file_urls': file_urls,
         }

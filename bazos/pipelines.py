@@ -12,16 +12,18 @@ import os
 
 from scrapy.selector import Selector
 
-def get_spam_protection():
-    response = verification.session.get('https://auto.bazos.cz/pridat-inzerat.php')
+def get_spam_protection(rubrika):
+    response = verification.session.get(f'https://{rubrika}.bazos.cz/pridat-inzerat.php')
     selected = Selector(text = response.content).xpath('//form[@id="formpridani"]//input[@type="hidden"]')[0]
     return (selected.xpath('@name').extract_first(), selected.xpath('@value').extract_first())
 
 def create_listing(data):
     print('Creating listing with data...')
     print(data)
+    rubrika = data['rubrika']
+    data.pop('rubrika')
 
-    spam_protection_key, spam_protection_value = get_spam_protection()
+    spam_protection_key, spam_protection_value = get_spam_protection(rubrika)
     payload = {
         spam_protection_key: spam_protection_value,
         'heslo': config.PASSWORD,
@@ -40,7 +42,7 @@ def create_listing(data):
     payload.pop('file_urls')
     payload.pop('files')
 
-    response = verification.session.post('https://auto.bazos.cz/insert.php', data=payload, files=files)
+    response = verification.session.post(f'https://{rubrika}.bazos.cz/insert.php', data=payload, files=files)
 
     for file_info in data['files']:
         os.remove('photos/' + file_info['path'])
