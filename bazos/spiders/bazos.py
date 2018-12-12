@@ -28,9 +28,8 @@ class BazosSpiderXPath(scrapy.Spider):
         with open(f'backups/{listing_id}/index.html', 'wb') as f:
             f.write(response.body)
 
-        file_urls = response.xpath('//a[contains(@onmouseover, "return zobrazek")]/@href').extract()
-        if not file_urls:
-            file_urls = response.xpath('//img[@id="bobrazek"]/@src').extract()
+        file_urls = response.xpath('//img/@data-flickity-lazyload').extract()
+
         yield {
             'id': listing_id,
             'nadpis': response.xpath('//h1[@class="nadpis"]/text()').extract_first(),
