@@ -34,7 +34,7 @@ def create_listing(data):
     payload.update(data)
 
     files = {}
-    for idx in range(1, 10):
+    for idx in range(1, 11):
         index = idx - 1
         file_object = open('photos/' + data['files'][index]['path'], 'rb') if idx <= len(data['files']) else ''
         files['souborp{0}'.format('' if idx == 1 else idx)] = file_object
