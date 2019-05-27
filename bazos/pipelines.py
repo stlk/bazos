@@ -30,19 +30,20 @@ def create_listing(data):
         'cenavyber': '1',
         'maili': '',
         'Submit': 'Odeslat',
+        'files[]': [],
     }
     payload.update(data)
 
-    files = {}
-    for idx in range(1, 11):
-        index = idx - 1
-        file_object = open('photos/' + data['files'][index]['path'], 'rb') if idx <= len(data['files']) else ''
-        files['souborp{0}'.format('' if idx == 1 else idx)] = file_object
+    for file in data['files']:
+        file_object = open('photos/' + file['path'], 'rb')
+        upload_response = verification.session.post(f'https://{rubrika}.bazos.cz/upload.php', files={"file[0]": file_object})
+        upload_response.raise_for_status()
+        payload["files[]"].append(upload_response.json()[0])
 
     payload.pop('file_urls')
     payload.pop('files')
 
-    response = verification.session.post(f'https://{rubrika}.bazos.cz/insert.php', data=payload, files=files)
+    response = verification.session.post(f'https://{rubrika}.bazos.cz/insert.php', data=payload)
 
     for file_info in data['files']:
         os.remove('photos/' + file_info['path'])
